@@ -30,6 +30,7 @@ public class ClientImpl implements ClientInterface {
            System.out.println("::::::::::::::::::START OF MESSAGE FROM SERVER::::::::::::::::::\n\n"+receivedMessage+
                                "\n\n::::::::::::::::::END OF MESSAGE FROM SERVER::::::::::::::::::\n");
            String userResponse = userInputHandler.pickUserCommand();
+           System.out.println(userResponse);
            connectionHandler.sendMessage(userResponse);
 
         }
