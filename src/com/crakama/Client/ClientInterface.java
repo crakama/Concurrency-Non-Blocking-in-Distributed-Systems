@@ -1,4 +1,4 @@
-package com.crakama;
+package com.crakama.Client;
 
 import java.io.IOException;
 import java.net.Socket;

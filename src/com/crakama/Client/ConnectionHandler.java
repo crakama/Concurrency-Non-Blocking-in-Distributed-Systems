@@ -1,4 +1,4 @@
-package com.crakama;
+package com.crakama.Client;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -20,7 +20,6 @@ public class ConnectionHandler {
         this.inputStream = new ObjectInputStream(clientSocket.getInputStream());
     }
 
-
     /**
      *
      * @return returns status of connected client socket
@@ -35,19 +34,12 @@ public class ConnectionHandler {
      */
     public void sendMessage(String msgToSend) {
         final String sms = msgToSend;
-
-        Thread sendMessageThread = new Thread(){
-            @Override
-            public void run() {
-                try {
+                     try {
                     outStream.writeObject(sms);
                     outStream.flush();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-            }
-        };
-        sendMessageThread.start();
     }
 
     /**

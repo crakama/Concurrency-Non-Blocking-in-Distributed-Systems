@@ -1,8 +1,6 @@
-package com.crakama;
+package com.crakama.Client;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.Socket;
 
 public class CommHandlerThread implements Runnable {
@@ -20,12 +18,6 @@ public class CommHandlerThread implements Runnable {
     /**
      * While loop used to allow playing of multiple games.
      */
-    //Pick user command from CMD e.g start
-    //Open output stream
-    //Write user command to output stream
-    //Wait for server reply, read via a socket input stream
-    //Server accepts connection, picks a word from dict or txt and sends it back filled with dashes to the user
-    //Client should have a way of always waiting for user input that is not command - while loop.
     @Override
     public void run() {
         while(true){
@@ -38,10 +30,9 @@ public class CommHandlerThread implements Runnable {
                       clientInterface.processResponse(usercommands,clientHangSock);
                       break;
                   case "quit":
-                      //System.exit();
+                      System.exit(0);
                       break;
                   default:
-                      //Read user input and send the character or word to sever for processing
               }
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
@@ -49,8 +40,6 @@ public class CommHandlerThread implements Runnable {
             }
 
         }
-    }//Run
-
-
+    }
 
 }

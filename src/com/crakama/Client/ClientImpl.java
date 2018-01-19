@@ -1,4 +1,4 @@
-package com.crakama;
+package com.crakama.Client;
 
 import java.io.*;
 import java.net.Socket;
@@ -16,10 +16,6 @@ public class ClientImpl implements ClientInterface {
         this.userInputHandler = new UserInputHandler();
     }
 
-    public ClientImpl() {
-
-    }
-
     @Override
     public void processResponse(String receivedCMD, Socket clientHangSock) throws IOException, ClassNotFoundException {
         System.out.println("Sending start request to server:::...." + receivedCMD);
@@ -27,14 +23,15 @@ public class ClientImpl implements ClientInterface {
 
         while (connectionHandler.isConnected()){
            String receivedMessage = connectionHandler.readMessage();
-           System.out.println("::::::::::::::::::START OF MESSAGE FROM SERVER::::::::::::::::::\n\n"+receivedMessage+
-                               "\n\n::::::::::::::::::END OF MESSAGE FROM SERVER::::::::::::::::::\n");
+
+           System.out.println("//***-------------------------------------------------------------------------***\n\n"+receivedMessage+
+                               "\n\n***-------------------------------------------------------------------------***\n");
            String userResponse = userInputHandler.pickUserCommand();
            System.out.println(userResponse);
            connectionHandler.sendMessage(userResponse);
-
+            System.out.println("messade sent");
         }
-
+        //connectionHandler.closeConnection();
     }
 
 }
