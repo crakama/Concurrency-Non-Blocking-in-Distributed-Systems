@@ -25,11 +25,11 @@ public class Main {
     }
 
     private static void readData(Socket clientSocket) throws IOException, ClassNotFoundException {
-        connectionHandler = new ConnectionHandler(clientSocket);
+        //connectionHandler = new ConnectionHandler(clientSocket);
         while (clientSocket.isConnected()){
-            String inData = connectionHandler.readMessage();
-            String outData = processData(inData);
-            connectionHandler.sendMessage(outData);
+           // String inData = connectionHandler.readMessage();
+            //String outData = processData(inData);
+            //connectionHandler.sendMessage(outData);
 
         }
         System.out.println("Conn problem");

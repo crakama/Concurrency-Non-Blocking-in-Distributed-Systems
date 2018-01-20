@@ -5,59 +5,43 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-/**
- * Created by kate on 02/01/2018.
- */
-
 public class ConnectionHandler {
-    Socket clientSocket;
-    ObjectOutputStream outStream;
-    ObjectInputStream inputStream;
+    private ObjectOutputStream writeData;
+    private ObjectInputStream readData;
+    private Socket clientSocket;
 
-    public ConnectionHandler(Socket clientHangSock) throws IOException {
-        this.clientSocket = clientHangSock;
-        this.outStream = new ObjectOutputStream(clientSocket.getOutputStream());
-        this.inputStream = new ObjectInputStream(clientSocket.getInputStream());
+    public void connect(String host, int port, OutputHandler outputHandler) throws IOException {
+        System.out.println(host + port+ " ConnectionHandler");
+        this.clientSocket = new Socket(host,port);
+        System.out.println(host + port+ " Connection Success1");
+        readData = new ObjectInputStream(clientSocket.getInputStream());
+        writeData = new ObjectOutputStream(clientSocket.getOutputStream());
+        System.out.println(host + port+ " Connection Success2");
+        new Thread(new ListenerThread(outputHandler)).start();
+
     }
 
-    /**
-     *
-     * @return returns status of connected client socket
-     */
-    public boolean isConnected(){
-        return clientSocket.isConnected();
-    }
+    private class ListenerThread implements  Runnable{
+        private final OutputHandler outputHandler;
+        public ListenerThread(OutputHandler outputHandler){
+            this.outputHandler = outputHandler;
 
-    /**
-     *
-     * @param msgToSend Message to be sent from/to server/client
-     */
-    public void sendMessage(String msgToSend) {
-        final String sms = msgToSend;
-                     try {
-                    outStream.writeObject(sms);
-                    outStream.flush();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-    }
-
-    /**
-     * @return message from ObjectInputStreams.
-     * @throws IOException
-     * @throws ClassNotFoundException
-     */
-    public String readMessage() throws IOException, ClassNotFoundException {
-        String receivedMSG = (String) inputStream.readObject();
-        return receivedMSG;
-    }
-
-    public void closeConnection(){
-        try{
-            clientSocket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-    }
+        @Override
+        public void run(){
+            try {
+                for(;true;){
+                    String msg = (String)readData.readObject();
+                    outputHandler.handleServerResponse(msg);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }catch (Throwable connectionFailure){
+                outputHandler.handleErrorResponse(connectionFailure);
+            }
+        }
 
+    }
 }
