@@ -10,11 +10,15 @@ A simple java system that uses TCP sockets for communication. Its consists of se
 
 * Blocking Server that uses Java IO 
   - One main server class that handles everything in the original main thread
+  - Only one client can connect to it at a time
+  
 * Threaded Blocking Server
+  - More than one client can connect to it at a time,clients can send requests concurrently
+  - Have a new thread that handles server operations.
 
 * Thread Pool Blocking Server
 
 * Java NIO Blocking
 
-* Java NIO non blocking
+* Java NIO Non Blocking
 

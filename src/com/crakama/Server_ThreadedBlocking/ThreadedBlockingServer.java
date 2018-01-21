@@ -1,4 +1,4 @@
-package com.crakama.Server;
+package com.crakama.Server_ThreadedBlocking;
 
 import com.crakama.common.MsgProtocol;
 import com.crakama.common.MsgType;
@@ -8,19 +8,28 @@ import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Main {
+public class ThreadedBlockingServer {
     static ObjectOutputStream toClient;
 
     /**
      * Blocks until client sends connection request
+     * Many client sockets can connect to server because server operations
+     * Are handled on a different thread
      * @clientSocket is never null because the server is always listening
      */
     public static void main(String[] args) throws IOException, ClassNotFoundException {
         ServerSocket serverSocket = new ServerSocket(2123);
         while (true){
             Socket clientSocket = serverSocket.accept();
-            System.out.println("Server accepted Connection");
-            readData(clientSocket);
+            System.out.println("Server accepted Connection" + clientSocket);
+
+            new Thread(() -> {
+                try {
+                    readData(clientSocket);
+                } catch (ClassNotFoundException | IOException e) {
+                    e.printStackTrace();
+                }
+            }).start();
         }
     }
 
