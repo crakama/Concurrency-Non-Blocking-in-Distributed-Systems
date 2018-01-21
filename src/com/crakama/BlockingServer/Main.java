@@ -1,13 +1,15 @@
 package com.crakama.BlockingServer;
 
-import com.crakama.Client.ConnectionHandler;
-
+import com.crakama.common.MsgProtocol;
+import com.crakama.common.MsgType;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Main {
-    static ConnectionHandler connectionHandler;
+    static ObjectOutputStream toClient;
 
     /**
      * Blocks until client sends connection request
@@ -19,23 +21,44 @@ public class Main {
             Socket clientSocket = serverSocket.accept();
             System.out.println("Server accepted Connection");
             readData(clientSocket);
-
         }
-
     }
 
     private static void readData(Socket clientSocket) throws IOException, ClassNotFoundException {
-        //connectionHandler = new ConnectionHandler(clientSocket);
+        toClient = new ObjectOutputStream(clientSocket.getOutputStream());
+        ObjectInputStream fromClient = new ObjectInputStream(clientSocket.getInputStream());
         while (clientSocket.isConnected()){
-           // String inData = connectionHandler.readMessage();
-            //String outData = processData(inData);
-            //connectionHandler.sendMessage(outData);
+            try{
+                MsgProtocol msg = (MsgProtocol) fromClient.readObject();
+                switch (msg.getMsgType()){
+                    case START:
+                        processData();
+                        sendResponse();
 
+                        break;
+                    case GUESS:
+                        processGuess();
+                        break;
+                    case STOP:
+                        processData();
+                }
+            }catch (IOException e){
+
+            }
         }
         System.out.println("Conn problem");
     }
 
-    private static String processData(String data){
-        return "Welcome";
+    public static void sendResponse() throws IOException {
+        MsgProtocol msgProtocol = new MsgProtocol(MsgType.RESPONSE,"Connected to server!!!");
+        toClient.writeObject(msgProtocol);
+        toClient.flush();
+        toClient.reset();
+    }
+    private static String processData(){
+        return "Welcome, Game started";
+    }
+    private static String processGuess(){
+        return "Guess received";
     }
 }

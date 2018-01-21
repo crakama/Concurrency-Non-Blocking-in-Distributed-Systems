@@ -1,4 +1,4 @@
-package com.crakama.Client;
+package com.crakama.Client.view;
 
 class CmdHandler {
     private final String userCommand;
