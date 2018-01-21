@@ -35,7 +35,6 @@ public class CmdInterpreter implements Runnable{
                         if(this.isConnected = true){
                             controller.startGame();
                         }
-
                     case QUIT:
                         break;
                     default:
@@ -43,11 +42,9 @@ public class CmdInterpreter implements Runnable{
                 }
 
             }catch (Exception e){
-
             }
         }
     }
-
     /**
      * Handles user input from commandline
      */

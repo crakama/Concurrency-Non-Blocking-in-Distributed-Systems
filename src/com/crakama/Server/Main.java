@@ -1,4 +1,4 @@
-package com.crakama.BlockingServer;
+package com.crakama.Server;
 
 import com.crakama.common.MsgProtocol;
 import com.crakama.common.MsgType;

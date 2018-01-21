@@ -1,4 +1,4 @@
-package com.crakama.BlockingServer;
+package com.crakama.Server;
 
 public class ClientCommHandler {
 }
