@@ -6,4 +6,5 @@ public interface OutputHandler {
     void handleErrorResponse(Throwable connectionFailure);
 
 
+    void informUser();
 }

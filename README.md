@@ -15,6 +15,7 @@ A simple java system that uses TCP sockets for communication. Its consists of se
 * Threaded Blocking Server
   - More than one client can connect to it at a time,clients can send requests concurrently
   - Have a new thread that handles server operations.
+  ![Threaded Blocking Server](https://github.com/crakama/Concurrency-Non-Blocking-in-Distributed-Systems/blob/master/images/ThreadedBlockingServer.png)
 
 * Thread Pool Blocking Server
 

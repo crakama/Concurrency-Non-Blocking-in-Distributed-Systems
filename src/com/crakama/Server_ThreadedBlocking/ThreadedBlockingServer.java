@@ -5,45 +5,56 @@ import com.crakama.common.MsgType;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.UncheckedIOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class ThreadedBlockingServer {
     static ObjectOutputStream toClient;
-
+    private  int DEFAULT_PORT = 2123;
     /**
-     * Blocks until client sends connection request
-     * Many client sockets can connect to server because server operations
-     * Are handled on a different thread
+     * Allows many client sockets to connect because server operations
+     * Are handled by a different thread
      * @clientSocket is never null because the server is always listening
      */
-    public static void main(String[] args) throws IOException, ClassNotFoundException {
-        ServerSocket serverSocket = new ServerSocket(2123);
-        while (true){
-            Socket clientSocket = serverSocket.accept();
-            System.out.println("Server accepted Connection" + clientSocket);
+    public static void main(String[] args){
 
-            new Thread(() -> {
-                try {
-                    readData(clientSocket);
-                } catch (ClassNotFoundException | IOException e) {
-                    e.printStackTrace();
-                }
-            }).start();
+        new ThreadedBlockingServer().incomingRequests();
+
+    }
+
+    public void incomingRequests(){
+        try {
+            ServerSocket serverSocket = new ServerSocket(DEFAULT_PORT);
+
+            while (true){
+                Socket clientSocket = serverSocket.accept();
+                toClient = new ObjectOutputStream(clientSocket.getOutputStream());
+                sendResponse("Server Accepted Connection!!!.");
+                new Thread(() -> {
+                        try {
+                        readData(clientSocket);
+                        } catch (ClassNotFoundException | IOException e) {
+                        e.printStackTrace();
+                        }
+                        }).start();
+
+            }
+        }catch (IOException serverconnectionfailed){
+            throw new UncheckedIOException(serverconnectionfailed);
         }
     }
 
-    private static void readData(Socket clientSocket) throws IOException, ClassNotFoundException {
-        toClient = new ObjectOutputStream(clientSocket.getOutputStream());
+    public void readData(Socket clientSocket) throws IOException, ClassNotFoundException {
+
         ObjectInputStream fromClient = new ObjectInputStream(clientSocket.getInputStream());
         while (clientSocket.isConnected()){
             try{
                 MsgProtocol msg = (MsgProtocol) fromClient.readObject();
                 switch (msg.getMsgType()){
                     case START:
-                        processData();
-                        sendResponse();
-
+                        String response = processData();
+                        sendResponse(response);
                         break;
                     case GUESS:
                         processGuess();
@@ -55,11 +66,11 @@ public class ThreadedBlockingServer {
 
             }
         }
-        System.out.println("Conn problem");
+        sendResponse("Conn problem");
     }
 
-    public static void sendResponse() throws IOException {
-        MsgProtocol msgProtocol = new MsgProtocol(MsgType.RESPONSE,"Connected to server!!!");
+    public static void sendResponse(String response) throws IOException {
+        MsgProtocol msgProtocol = new MsgProtocol(MsgType.RESPONSE,response);
         toClient.writeObject(msgProtocol);
         toClient.flush();
         toClient.reset();
@@ -71,3 +82,4 @@ public class ThreadedBlockingServer {
         return "Guess received";
     }
 }
+

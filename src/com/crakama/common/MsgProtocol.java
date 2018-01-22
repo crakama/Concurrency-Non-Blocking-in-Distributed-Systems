@@ -23,4 +23,8 @@ public class MsgProtocol implements Serializable{
     public MsgType getMsgType() {
         return msgType;
     }
+
+    public void setMsgType(MsgType msgType, String msgBody){
+
+    }
 }

@@ -11,6 +11,7 @@ public class CmdInterpreter implements Runnable{
     private boolean isConnected = false;
     Controller controller;
     private BufferedReader bufferedReader;
+   private OutputHandler outputHandler;
 
     public void start(){
         receivingCmds = true;
@@ -19,6 +20,7 @@ public class CmdInterpreter implements Runnable{
     }
     @Override
     public void run() {
+        OutputHandler outputHandler = new ServerResponse();
         while (receivingCmds){
             try {
                 CmdHandler cmdHandler = new CmdHandler(requestHandler());
@@ -27,7 +29,8 @@ public class CmdInterpreter implements Runnable{
                     case CONNECT:
                         controller.connect(cmdHandler.getParameters(1),
                                 Integer.parseInt(cmdHandler.getParameters(2)), new ServerResponse());
-                        informUser();
+                        Thread.sleep(1000);
+                        outputHandler.informUser();
                         this.isConnected = true;
 
                         break;
@@ -67,9 +70,11 @@ public class CmdInterpreter implements Runnable{
             System.out.println("//***-------------------------------------------------------------------------***\n\n"+connectionFailure+
                     "\n\n***-------------------------------------------------------------------------***\n");
         }
-    }
 
-    public void informUser() {
-        System.out.println(" Enter a command to proceed");
+        @Override
+        public void informUser() {
+            System.out.println(" Enter a command to proceed");
+        }
     }
 }
+//TO DO single output mechanism for both server and client
