@@ -1,6 +1,5 @@
 package com.crakama.Client.net;
 
-import com.crakama.Client.view.OutputHandler;
 import com.crakama.common.MsgProtocol;
 import com.crakama.common.MsgType;
 
@@ -52,12 +51,11 @@ public class ServerCommHandler {
                     MsgProtocol msg = (MsgProtocol)readData.readObject();
                     outputHandler.handleServerResponse(getMgsBody(msg));
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }catch (Throwable connectionFailure){
-                outputHandler.handleErrorResponse(connectionFailure);
+            } catch (ClassNotFoundException|IOException e) {
+                outputHandler.handleErrorResponse("IO or Class Not Found Error!!\n"+ e);
+
+            } catch (Throwable connectionFailure){
+                outputHandler.handleErrorResponse("Connection Lost !!\n" + connectionFailure);
             }
         }
 

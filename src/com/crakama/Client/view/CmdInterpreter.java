@@ -1,6 +1,7 @@
 package com.crakama.Client.view;
 
 import com.crakama.Client.controller.Controller;
+import com.crakama.Client.net.OutputHandler;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -66,7 +67,7 @@ public class CmdInterpreter implements Runnable{
         }
 
         @Override
-        public void handleErrorResponse(Throwable connectionFailure) {
+        public void handleErrorResponse(String connectionFailure) {
             System.out.println("//***-------------------------------------------------------------------------***\n\n"+connectionFailure+
                     "\n\n***-------------------------------------------------------------------------***\n");
         }
