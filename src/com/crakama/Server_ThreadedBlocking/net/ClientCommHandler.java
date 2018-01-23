@@ -1,4 +1,4 @@
-package com.crakama.Server_ThreadedBlocking;
+package com.crakama.Server_ThreadedBlocking.net;
 
 import com.crakama.common.MsgProtocol;
 import com.crakama.common.MsgType;

@@ -1,13 +1,9 @@
 package com.crakama.Server_ThreadedBlocking.starter;
 
-import com.crakama.Client.net.ServerCommHandler;
-import com.crakama.Server_ThreadedBlocking.ClientCommHandler;
-import com.crakama.Server_ThreadedBlocking.RequestHandler;
-import com.crakama.common.MsgProtocol;
-import com.crakama.common.MsgType;
+import com.crakama.Server_ThreadedBlocking.net.ClientCommHandler;
+import com.crakama.Server_ThreadedBlocking.net.RequestHandler;
+
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.UncheckedIOException;
 import java.net.ServerSocket;
 import java.net.Socket;
