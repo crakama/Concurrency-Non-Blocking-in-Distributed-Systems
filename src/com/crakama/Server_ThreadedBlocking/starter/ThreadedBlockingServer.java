@@ -24,6 +24,7 @@ public class ThreadedBlockingServer {
             ServerSocket serverSocket = new ServerSocket(DEFAULT_PORT);
             while (true){
                 Socket clientSocket = serverSocket.accept();
+                System.out.println("ACCEPT");
                 clientCommHandler = new ClientCommHandler(clientSocket);
                 clientCommHandler.sendResponse("Server Accepted Connection!!!.");
                 startRequestHandler(clientCommHandler,clientSocket);
